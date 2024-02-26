@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Developed By Ray 🍁🚬जय शम्भो🚬🍁</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            background-color: #343a40;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        form {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button[type="submit"] {
+            background-color: #343a40;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #555;
+        }
+
+        h2 {
+            background-color: #343a40;
+            color: white;
+            padding: 10px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        p {
+            text-align: center;
+            font-style: italic;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>RAY 🍁 जय शम्भो 🍁</h1>
+    <div class="container">
+        <form action="/join" method="post">
+            <label for="channelId">Enter Channel ID:</label>
+            <input type="text" id="channelId" name="channelId" required>
+            <button type="submit">Join Room</button>
+        </form>
+        <form action="/become-speaker" method="post">
+            <button type="submit">Join Speaker Panel</button>
+        </form>
+        <form action="/follow-for-follow" method="post">
+            <button type="submit">Follow for Follow</button>
+        </form>
+        <h2>Share a Room</h2>
+        <form id="share-form" action="/shareRoom" method="post">
+            <label for="message">Message:</label>
+            <input type="text" id="message" name="message" required>
+            <br>
+            <button type="submit">Share Room</button>
+        </form>
+        <br>
+<h1>Search House</h1>
+  <label for="searchInput">Enter Your search house name:</label>
+  <input type="text" id="searchInput" placeholder="Search..." />
+  <button id="searchButton">Search</button>
+  <div id="searchResults"></div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const searchInput = document.getElementById('searchInput');
+      const searchButton = document.getElementById('searchButton');
+      const searchResults = document.getElementById('searchResults');
+
+      searchButton.addEventListener('click', function () {
+        const query = searchInput.value;
+        if (!query) {
+          alert('Please enter a search query.');
+          return;
+        }
+
+        // Send a request to the server to perform the search
+        fetch('/search', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ query }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            // Clear previous results
+            searchResults.innerHTML = '';
+
+            // Check if there are items in the response
+            if (data.items && data.items.length > 0) {
+              const resultsTable = document.createElement('table');
+              resultsTable.id = 'searchResultsTable'; // Add an ID for more specific styling
+              resultsTable.innerHTML = `
+                <tr>
+                  <th>Club ID</th>
+                  <th>Name</th>
+                  <th>Subtitle</th>
+                  <th>Members</th>
+                </tr>
+              `;
+
+              data.items.forEach((item) => {
+                const club = item.social_club;
+                const row = resultsTable.insertRow();
+                row.insertCell().textContent = club.social_club_id;
+                row.insertCell().textContent = club.name;
+                row.insertCell().textContent = club.subtitle;
+                row.insertCell().textContent = club.num_members;
+              });
+
+              searchResults.appendChild(resultsTable);
+            } else {
+              searchResults.textContent = 'No results found.';
+            }
+          })
+          .catch((error) => {
+            console.error('Error:', error.message);
+          });
+      });
+    });
+  </script>
+        
+          <h2>Join Clubhouse Social Club</h2>
+    <form id="joinHouseForm">
+        <label for="socialClubId">Social Club ID:</label>
+        <input type="text" id="socialClubId" name="socialClubId" required>
+        <button type="submit">Join</button>
+    </form>
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('joinHouseForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const socialClubId = document.getElementById('socialClubId').value;
+
+            try {
+                const response = await fetch('/joinHouse', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ social_club_id: socialClubId }),
+                });
+
+                if (response.status === 200) {
+                    const data = await response.json();
+                    const resultContainer = document.getElementById('result');
+                    resultContainer.innerHTML = `<p>${data.message}</p>`;
+                } else {
+                    throw new Error(`Request failed with status code ${response.status}`);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                const resultContainer = document.getElementById('result');
+                resultContainer.innerHTML = '<p>Error occurred while sending the request.</p>';
+            }
+        });
+    </script>
+        <!-- Your forms here -->
+
+        <!-- Add a paragraph below -->
+        <p>This is a demo to get your personal bots contact Ray Bibek 🍁🚬जय शम्भो🚬🍁 </p>
+    </div>
+</body>
+</html>
